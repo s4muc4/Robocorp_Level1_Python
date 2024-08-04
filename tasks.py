@@ -6,7 +6,7 @@ from RPA.PDF import PDF
 
 @task #Means that this function is the entry point
 def robot_spare_bin_python():
-    browser.configure(slowmo=1000)
+    browser.configure(slowmo=100)
     
     open_the_intranet_website()
     log_in()
