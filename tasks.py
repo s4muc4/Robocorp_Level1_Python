@@ -1,8 +1,11 @@
+import logging
 from robocorp.tasks import task
 from robocorp import browser
 from RPA.HTTP import HTTP
 from RPA.Excel.Files import Files
 from RPA.PDF import PDF
+from RPA.Robocorp.Vault import Vault
+from RPA.Robocorp.Storage import Storage
 
 @task #Means that this function is the entry point
 def robot_spare_bin_python():
@@ -17,12 +20,22 @@ def robot_spare_bin_python():
     logout()
 
 def open_the_intranet_website():
-    browser.goto("https://robotsparebinindustries.com/")
+    storage = Storage()
+
+    url = storage.get_text_asset("RobotSpareBin_URL")
+
+    browser.goto(url)
 
 def log_in():
+
+    _secret = Vault().get_secret("RobotSpareBin_Credential")
+
+    USER_NAME = _secret["user"]
+    PASSWORD = _secret["password"]
+
     page = browser.page()
-    page.fill("#username", "maria")
-    page.fill("#password", "thoushallnotpass")
+    page.fill("#username", USER_NAME)
+    page.fill("#password", PASSWORD)
     page.click("button:text('Log in')")
 
 def fill_and_submit_sales_form(sales_rep):
